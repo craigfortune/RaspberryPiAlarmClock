@@ -4,8 +4,17 @@ import AlarmData
 
 class AlarmSounder:
 
+    alarmDataObject = None
+
     def __init__(self):
         pass
+
+    def updateNotification(self, object):
+        if self.alarmDataObject == object:
+            if self.alarmDataObject.alarmSounding == True:
+                self.makeNoise(object)
+            else:
+                self.stopNoise(object)
 
     # Start making some noise (ie, alarm is sounding)
     def makeNoise(self, alarmDataObj):

@@ -1,13 +1,17 @@
 from time import *
 from threading import Timer
+import ObserverPattern
 
 # AlarmData holds information about
-class AlarmData:
+class AlarmData(ObserverPattern.ObsSubject):
 
-    alarmNoiseDelegate = None
     daysOfTheWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    alarmSounding = False
 
     def __init__(self, hour, minute, second):
+
+        super().__init__()
+
         print('Created AlarmData object')
             
         self.activeDays = {
@@ -26,8 +30,6 @@ class AlarmData:
         self.second = second % 60
 
         self.displayAlarmTime()
-
-        self.alreadyTriggered = False
 
 
     def displayAllAlarmDays(self):
@@ -75,11 +77,7 @@ class AlarmData:
             print('Alarm set for:', self.hour, self.minute, self.second, 'on no days')
 
     def update(self):
-        hour = localtime().__getattribute__('tm_hour')
-        minute = localtime().__getattribute__('tm_min')
-        second = localtime().__getattribute__('tm_sec')
-
-        #print(hour, minute, second, '\t', self.hour, self.minute, self.second)
+        hour, minute, second = self.hms()
 
         if(self.isDayActive(self.daysOfTheWeek[localtime().__getattribute__('tm_wday')])):
             if(self.hour == hour):
@@ -89,29 +87,26 @@ class AlarmData:
                     return
 
     def startAlarm(self):
-        if not(self.alreadyTriggered):
-            hour = localtime().__getattribute__('tm_hour')
-            minute = localtime().__getattribute__('tm_min')
-            second = localtime().__getattribute__('tm_sec')
+        if not(self.alarmSounding):
+            hour, minute, second = self.hms()
             print('ALARM SOUNDING', hour, minute, second)
 
-            self.startAlarmSound()
-            
-            self.alreadyTriggered = True;
+            self.alarmSounding = True
+            self.notify()
+
             t = Timer(5.0, self.resetAlarm).start()
 
     def resetAlarm(self):
-        hour = localtime().__getattribute__('tm_hour')
-        minute = localtime().__getattribute__('tm_min')
-        second = localtime().__getattribute__('tm_sec')        
+        hour, minute, second = self.hms()
         print('RESET TRIGGER', hour, minute, second)
 
-        self.stopAlarmSound()
-        
-        self.alreadyTriggered = False;
+        self.alarmSounding = False
+        self.notify()
 
-    def startAlarmSound(self):
-        self.alarmNoiseDelegate.makeNoise(self)
+    # utility, simply saves some typing
+    def hms(self):
+        hour = localtime().__getattribute__('tm_hour')
+        minute = localtime().__getattribute__('tm_min')
+        second = localtime().__getattribute__('tm_sec')
 
-    def stopAlarmSound(self):
-        self.alarmNoiseDelegate.stopNoise(self)
+        return hour, minute, second

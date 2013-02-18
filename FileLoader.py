@@ -19,7 +19,9 @@ class FileLoader:
         # Set the delegate object for dealing with making noise on
         # the alarmData object we've just created
         # Different objects can make different noises
-        alarmData.alarmNoiseDelegate = AlarmSounder.AlarmSounder()
+        alarmSounder = AlarmSounder.AlarmSounder()
+        alarmData.attach(alarmSounder)
+        alarmSounder.alarmDataObject = alarmData
 
         # Place it into the alarmDataList
         self.insertAlarmData(tmpList, alarmData)

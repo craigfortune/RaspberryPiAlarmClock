@@ -14,7 +14,7 @@ class FileLoader:
         second = time.__getattribute__('tm_sec')
 
         # 15 seconds on from now
-        alarmData = AlarmData.AlarmData(hour, minute, second + 15)
+        alarmData = AlarmData.AlarmData(hour, minute, second + 5)
 
         # Set the delegate object for dealing with making noise on
         # the alarmData object we've just created

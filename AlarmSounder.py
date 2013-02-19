@@ -28,6 +28,7 @@ class AlarmSounder:
         os.system(cmd)
 
     # return the path for the mp3 track to play
+    # TODO centralise the config file loading
     def getTrack(self):
         currDir = os.path.dirname(os.path.abspath(sys.argv[0]))
         mp3Track = 'song.mp3'

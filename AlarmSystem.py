@@ -1,6 +1,3 @@
-from time import *
-
-import AlarmData
 import FileLoader
 
 # The AlarmSystem class holds a collection of
@@ -9,12 +6,15 @@ class AlarmSystem:
 
     def __init__(self):
         self.alarmDataList = list()
+        self.chimeList = list()
         self.loadingDelegate = FileLoader.FileLoader()
 
     # Update each AlarmData object we hold
     def update(self):
-        for item in self.alarmDataList:
-            item.update()
+        for alarmItem in self.alarmDataList:
+            alarmItem.update()
+        for chimeItem in self.chimeList:
+            chimeItem.update()
 
     # Called to set things running
     def start(self):

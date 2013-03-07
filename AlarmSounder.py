@@ -1,6 +1,7 @@
 import os
 import sys
 import AlarmData
+import subprocess
 
 class AlarmSounder:
 
@@ -23,9 +24,12 @@ class AlarmSounder:
         print(os.path.dirname(os.path.abspath(sys.argv[0])))
         # Using mpg321 to make a noise by calling it directly with an MP3 track
 
-        cmd = 'mpg321 ' + self.getTrack() + ' &'
-        print('Cmd is: ' + cmd)
-        os.system(cmd)
+        if(sys.platform == 'darwin'):
+            return_code = subprocess.call(["afplay", self.getTrack()])
+        else:
+            cmd = 'mpg321 ' + self.getTrack() + ' &'
+            print('Cmd is: ' + cmd)
+            os.system(cmd)
 
     # return the path for the mp3 track to play
     # TODO centralise the config file loading
@@ -54,4 +58,5 @@ class AlarmSounder:
 
     # Stop making the noise (ie, alarm stopped)
     def stopNoise(self, alarmDataObj):
+        print('Stop noise')
         pass
